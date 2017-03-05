@@ -1,0 +1,23 @@
+{
+  "name": "sort",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sort.js",
+  "scripts": {
+    "test": "istanbul cover _mocha ./test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wleonardo/sort.git"
+  },
+  "author": "leonardo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wleonardo/sort/issues"
+  },
+  "homepage": "https://github.com/wleonardo/sort#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "istanbul": "^0.4.5"
+  }
+}
