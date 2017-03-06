@@ -92,32 +92,32 @@ sort.selection = function(arr) {
   return arr;
 };
 
-// sort.merge = function(arr) {
-//   var res = [];
-//   arr.forEach(function(v) {
-//     res.push([v]);
-//   })
-//   var mergeOnce = function(arr1, arr2) {
-//     var res = [];
-//     var arr1Index = 0,
-//       arr2Index = 0;
-//     while (arr1Index < arr1.length && arr2Index < arr2.length) {
-//       var i1 = arr1[arr1Index];
-//       var i2 = arr2[arr2Index];
-//       if (i1 <= i2) {
-//         res.push(i1)
-//         arr1Index++;
-//       } else {
-//         res.push(i2);
-//         arr2Index++;
-//       }
-//     }
-//     return res;
-//   }
-//   var len = Math.ceil(res.length / 2);
-//   for (var i = 0; i < len; i++) {
-//     mergeOnce()
-//   }
-// }
+// 归并排序 O(nlogn)
+sort.merge = function(arr) {
+  if (arr.length < 2) {
+    return arr;
+  }
+  var len = Math.ceil(arr.length / 2);// 一半的长度
+  var left = arr.slice(0, len); // 获取左半部分的元素
+  var right = arr.slice(len); // 获取右半部分的元素
+  var mergeOnce = function(left, right) {
+    var res = [];
+    var leftIndex = 0,
+      rightIndex = 0;
+    while (leftIndex < left.length || rightIndex < right.length) {
+      var i1 = left[leftIndex];
+      var i2 = right[rightIndex];
+      if (i1 <= i2 || i2 === undefined) {
+        res.push(i1);
+        leftIndex++;
+      } else {
+        res.push(i2);
+        rightIndex++;
+      }
+    }
+    return res;
+  }
+  return mergeOnce(sort.merge(left), sort.merge(right));
+}
 
 module.exports = sort;
