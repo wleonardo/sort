@@ -1,3 +1,4 @@
+//(排序的稳定性是指如果在排序的序列中，存在前后相同的两个元素的话，排序前 和排序后他们的相对位置不发生变化)
 var arr = [2, 1, 3, 5, 6, 3, 1, 4];
 
 var swap = function(arr, p1, p2) {
@@ -97,7 +98,7 @@ sort.merge = function(arr) {
   if (arr.length < 2) {
     return arr;
   }
-  var len = Math.ceil(arr.length / 2);// 一半的长度
+  var len = Math.ceil(arr.length / 2); // 一半的长度
   var left = arr.slice(0, len); // 获取左半部分的元素
   var right = arr.slice(len); // 获取右半部分的元素
   var mergeOnce = function(left, right) {
@@ -116,8 +117,26 @@ sort.merge = function(arr) {
       }
     }
     return res;
-  }
+  };
   return mergeOnce(sort.merge(left), sort.merge(right));
-}
+};
+
+//希尔排序 O(nlog²n)
+sort.shell = function(arr) {
+  var gap = Math.floor(arr.length / 2);
+  var shellOnce = function(gap) {
+    for (var i = gap; i < arr.length; i++) {
+      var temp = arr[i];
+      for (var j = i - gap; j >= 0 && arr[j] > temp; j -= gap) {
+        arr[j + gap] = arr[j];
+      }
+      arr[j + gap] = temp;
+    }
+  };
+  for (; gap > 0; gap = Math.floor(gap / 2)) {
+    shellOnce(gap);
+  }
+  return arr;
+};
 
 module.exports = sort;
