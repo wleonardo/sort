@@ -1,3 +1,4 @@
+var random = require('./random-list.js');
 //(排序的稳定性是指如果在排序的序列中，存在前后相同的两个元素的话，排序前 和排序后他们的相对位置不发生变化)
 var arr = [2, 1, 3, 5, 6, 3, 1, 4];
 
@@ -135,6 +136,59 @@ sort.shell = function(arr) {
   };
   for (; gap > 0; gap = Math.floor(gap / 2)) {
     shellOnce(gap);
+  }
+  return arr;
+};
+
+/*
+  var heapify = function(level) {
+    for (var i = Math.ceil(arr.length / 2) - 1; i >= Math.pow(2, level - 1) - 1; i--) {
+      var left = i * 2 + 1;
+      var right = i * 2 + 2;
+      var childLargeIndex;
+      if (arr[right] && arr[left] < arr[right]) {
+        childLargeIndex = right;
+      } else {
+        childLargeIndex = left;
+      };
+
+      if (arr[i] < arr[childLargeIndex]) {
+        swap(arr, i, childLargeIndex);
+      }
+    };
+  };
+  for (var i = 1; i <= Math.floor(Math.log2(arr.length + 1)); i++) {
+    heapify(i);
+  }
+ */
+// 堆排序 O(nlogn)
+sort.heap = function(arr) {
+  var heapify = function(array, parentIndex, len) {
+    var left = parentIndex * 2 + 1;
+    var right = parentIndex * 2 + 2;
+
+    var childLargeIndex;
+    if (right < len && array[left] < array[right]) {
+      childLargeIndex = right
+    } else if (left < len) {
+      childLargeIndex = left;
+    }else {
+      return false;
+    }
+
+    if (array[parentIndex] < array[childLargeIndex]) {
+      swap(array, parentIndex, childLargeIndex);
+      heapify(array, childLargeIndex, len);
+    }
+  };
+
+  for (var i = Math.floor(arr.length / 2); i >= 0; i--) {
+    heapify(arr, i, arr.length);
+  }
+  var len = arr.length;
+  for (var i = len - 1; i >= 1; i--) {
+    swap(arr, 0, i);
+    heapify(arr, 0, --len);
   }
   return arr;
 };
