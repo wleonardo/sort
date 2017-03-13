@@ -1,4 +1,3 @@
-var randomList = require('./random-list.js');
 //(排序的稳定性是指如果在排序的序列中，存在前后相同的两个元素的话，排序前 和排序后他们的相对位置不发生变化)
 var arr = [2, 1, 3, 5, 6, 3, 1, 4];
 
@@ -236,8 +235,6 @@ sort.radix = function(arr) {
     return cache;
   };
 
-
-
   var maxNumber = getMaxNumber(arr);
   var length = maxNumber.toString().length;
 
@@ -257,6 +254,7 @@ sort.radix = function(arr) {
 };
 
 // 桶排序
+// https://zh.wikipedia.org/wiki/%E6%A1%B6%E6%8E%92%E5%BA%8F
 sort.bucket = function(arr, size) {
   size = size || 10;
   var max = getMaxNumber(arr);
@@ -282,6 +280,34 @@ sort.bucket = function(arr, size) {
   }
 
   return flatten(buckets);
+};
+
+
+// 计数排序
+// https://zh.wikipedia.org/wiki/%E8%AE%A1%E6%95%B0%E6%8E%92%E5%BA%8F
+sort.counting = function(arr){
+  var max = getMaxNumber(arr);
+  var min = getMinNumber(arr);
+  var bucketCount = max - min + 1;
+  var buckets = [];
+
+  for (var i = 0; i < bucketCount; i++) {
+    buckets[i] = 0;
+  }
+
+  for (var i = 0; i < arr.length; i++) {
+    buckets[arr[i] - min]++;
+  }
+
+  var index = 0;
+  for (var i = 0; i < bucketCount; i++) {
+    while(buckets[i]-- > 0){
+      console.log(i);
+      arr[index++] = i + min;
+    }
+  }
+
+  return arr;
 };
 
 module.exports = sort;
