@@ -302,7 +302,6 @@ sort.counting = function(arr){
   var index = 0;
   for (var i = 0; i < bucketCount; i++) {
     while(buckets[i]-- > 0){
-      console.log(i);
       arr[index++] = i + min;
     }
   }
