@@ -8,6 +8,38 @@ var swap = function(arr, p1, p2) {
   arr[p2] = cache;
 };
 
+var getMaxNumber = function(array) {
+  var max;
+  array.forEach(function(v) {
+    if (max === undefined) {
+      max = v;
+    } else {
+      max = max >= v ? max : v;
+    }
+  })
+  return new Number(max);
+};
+
+var getMinNumber = function(array) {
+  var min;
+  array.forEach(function(v) {
+    if (min === undefined) {
+      min = v;
+    } else {
+      min = min < v ? min : v;
+    }
+  })
+  return new Number(min);
+};
+
+var flatten = function(array) {
+  var res = [];
+  array.forEach(function(v) {
+    res = res.concat(v);
+  });
+  return res;
+};
+
 var count = 0;
 var sort = {};
 //冒泡排序 O(n^2) 稳定
@@ -172,7 +204,7 @@ sort.heap = function(arr) {
       childLargeIndex = right
     } else if (left < len) {
       childLargeIndex = left;
-    }else {
+    } else {
       return false;
     }
 
@@ -195,18 +227,8 @@ sort.heap = function(arr) {
 
 // 基数排序
 sort.radix = function(arr) {
-  var getMaxNumber = function(array) {
-    var max;
-    array.forEach(function(v){
-      if (max === undefined) {
-        max = v;
-      }else {
-        max = max > v ? max : v;
-      }
-    })
-    return new Number(max);
-  };
-  var creatBucket = function(){
+
+  var creatBucket = function() {
     var cache = [];
     for (var i = 9; i >= 0; i--) {
       cache.push([]);
@@ -214,30 +236,52 @@ sort.radix = function(arr) {
     return cache;
   };
 
-  var flatten = function(array) {
-    var res = [];
-    array.forEach(function(v){
-      res = res.concat(v);
-    });
-    return res;
-  };
+
 
   var maxNumber = getMaxNumber(arr);
   var length = maxNumber.toString().length;
 
-  var radixOnce = function(arr, digit){
+  var radixOnce = function(arr, digit) {
     var bucket = creatBucket();
     for (var i = arr.length - 1; i >= 0; i--) {
       var flag = Math.floor(arr[i] / digit) % 10;
       bucket[flag].unshift(arr[i]);
     }
     return flatten(bucket);
-  }
+  };
 
   for (var i = 1; i <= length; i++) {
     arr = radixOnce(arr, Math.pow(10, i - 1));
   }
   return arr;
+};
+
+// 桶排序
+sort.bucket = function(arr, size) {
+  size = size || 10;
+  var max = getMaxNumber(arr);
+  var min = getMinNumber(arr);
+  //根据桶大小计算出桶的数量
+  var bucketCount = Math.floor((max - min) / size) + 1;
+
+  //初始化桶
+  var buckets = new Array(bucketCount);
+  for (var i = 0; i < bucketCount; i++) {
+    buckets[i] = [];
+  }
+
+  //将每个待排序的数据放入对应的桶中
+  for (var i = 0; i < arr.length; i++) {
+    var flag = Math.floor((arr[i] - min) / size);
+    buckets[flag].push(arr[i]);
+  }
+
+  //对每个桶进行插入排序
+  for (var i = 0; i < bucketCount; i++) {
+    buckets[i] = sort.insert(buckets[i]);
+  }
+
+  return flatten(buckets);
 };
 
 module.exports = sort;
