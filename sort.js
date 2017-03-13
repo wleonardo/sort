@@ -1,4 +1,4 @@
-var random = require('./random-list.js');
+var randomList = require('./random-list.js');
 //(排序的稳定性是指如果在排序的序列中，存在前后相同的两个元素的话，排序前 和排序后他们的相对位置不发生变化)
 var arr = [2, 1, 3, 5, 6, 3, 1, 4];
 
@@ -189,6 +189,53 @@ sort.heap = function(arr) {
   for (var i = len - 1; i >= 1; i--) {
     swap(arr, 0, i);
     heapify(arr, 0, --len);
+  }
+  return arr;
+};
+
+// 基数排序
+sort.radix = function(arr) {
+  var getMaxNumber = function(array) {
+    var max;
+    array.forEach(function(v){
+      if (max === undefined) {
+        max = v;
+      }else {
+        max = max > v ? max : v;
+      }
+    })
+    return new Number(max);
+  };
+  var creatBucket = function(){
+    var cache = [];
+    for (var i = 9; i >= 0; i--) {
+      cache.push([]);
+    }
+    return cache;
+  };
+
+  var flatten = function(array) {
+    var res = [];
+    array.forEach(function(v){
+      res = res.concat(v);
+    });
+    return res;
+  };
+
+  var maxNumber = getMaxNumber(arr);
+  var length = maxNumber.toString().length;
+
+  var radixOnce = function(arr, digit){
+    var bucket = creatBucket();
+    for (var i = arr.length - 1; i >= 0; i--) {
+      var flag = Math.floor(arr[i] / digit) % 10;
+      bucket[flag].unshift(arr[i]);
+    }
+    return flatten(bucket);
+  }
+
+  for (var i = 1; i <= length; i++) {
+    arr = radixOnce(arr, Math.pow(10, i - 1));
   }
   return arr;
 };
